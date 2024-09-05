@@ -14,6 +14,8 @@ public class WaypointMovement : MonoBehaviour
         if(_point==null)
             _point = Instantiate(_waypointPref);
 
+        _point.SetActive(true);
+
         _point.transform.position = hit;
     }
 }

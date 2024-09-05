@@ -20,13 +20,16 @@ public class Point : MonoBehaviour
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
 
+        //_marker.gameObject.SetActive(true);
+
         Tween.Scale(_marker,new Vector3(0.8f,0.8f,0.8f),2f,Ease.InOutBack,cycleMode:CycleMode.Yoyo,cycles:-1);
         Tween.LocalPositionY(_marker, 0.8f, 2f, Ease.InOutBack, cycleMode: CycleMode.Yoyo, cycles: -1);
     }
 
     public void OnActivate()
     {
-        Tween.Position(_player, new Vector3(transform.position.x, transform.position.y + 1, transform.position.z),0.7f,Ease.OutExpo).OnComplete(()=> Destroy(transform.parent.gameObject));
+        //_marker.gameObject.SetActive(false);
+        Tween.Position(_player, new Vector3(transform.position.x, transform.position.y + _player.GetComponent<CharacterController>().height, transform.position.z), 0.7f, Ease.OutExpo).OnComplete(()=>  transform.parent.gameObject.SetActive(false));
     }
 
 }

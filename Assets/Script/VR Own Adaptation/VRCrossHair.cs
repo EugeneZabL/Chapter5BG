@@ -8,7 +8,9 @@ public class VRCrossHair : MonoBehaviour
 {
     private float _RETICLE_MAX_DISTANCE = 10f;
 
-    public LayerMask ReticleInteractionLayerMask = 1 << 8;
+    public LayerMask InteractionLayer = 1 << 8;
+
+    public LayerMask ActionLayer = 1 << 8;
 
     private Slider _slider;
 
@@ -32,15 +34,24 @@ public class VRCrossHair : MonoBehaviour
 
     private bool IsInteractive(GameObject gameObject)
     {
-        return (1 << gameObject?.layer & ReticleInteractionLayerMask) != 0;
+        return (1 << gameObject?.layer & InteractionLayer) != 0;
     }
 
-    private void SetParams(bool interactive)
+    private bool IsAction(GameObject gameObject)
     {
-        if(interactive)
+        return (1 << gameObject?.layer & ActionLayer) != 0;
+    }
+
+    private void SetParams(GameObject gameObject)
+    {
+        if(IsAction(gameObject))
         {
             _tweenRotate = Tween.LocalRotation(transform,new Vector3(0,0,45),0.6f);
             _tweenFill = Tween.UISliderValue(_slider, 1f, 1.7f,startDelay:0.5f).OnComplete(() => CursorAction());
+        }
+        else if(IsInteractive(gameObject))
+        {
+            _tweenRotate = Tween.LocalRotation(transform, new Vector3(0, 0, 45), 0.6f);
         }
     }
 
@@ -70,14 +81,14 @@ public class VRCrossHair : MonoBehaviour
                 // New GameObject.
                 if (IsInteractive(_gazedAtObject))
                 {
-                    //_gazedAtObject?.SendMessage("OnPointerExit");
+                   // _gazedAtObject?.SendMessage("OnPointerExit");
                 }
 
                 ResetParams();
 
                 _gazedAtObject = _hit.transform.gameObject;
 
-                SetParams(IsInteractive(_gazedAtObject));
+                SetParams(_gazedAtObject);
 
                 if (IsInteractive(_gazedAtObject))
                 {
@@ -92,7 +103,7 @@ public class VRCrossHair : MonoBehaviour
                 // No GameObject detected in front of the camera.
                 if (IsInteractive(_gazedAtObject))
                 {
-                    // _gazedAtObject?.SendMessage("OnPointerExit");
+                     //_gazedAtObject?.SendMessage("OnPointerExit");
                 }
 
                 _gazedAtObject = null;

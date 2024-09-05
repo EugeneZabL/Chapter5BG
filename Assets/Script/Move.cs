@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class Move : MonoBehaviour
 {
     public float moveSpeed = 2.0f;  // Скорость передвижения игрока
+    private float gravityValue = -9.81f;
 
     private CharacterController characterController;
 
@@ -16,6 +17,7 @@ public class Move : MonoBehaviour
 
     void Update()
     {
+
         // Чтение осей стика
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
